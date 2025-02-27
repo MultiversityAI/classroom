@@ -2,7 +2,7 @@
 
 built using [AG2](https://ag2.ai)
 
-## usage guide
+## guide
 
 ### setup
 
