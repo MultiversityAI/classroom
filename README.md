@@ -5,14 +5,40 @@ built using [AutoGen](https://github.com/microsoft/autogen) / [AG2](https://ag2.
 ## usage guide
 
 ### setup
+
+#### 1. download
 ```bash
 git clone https://github.com/MultiversityAI/classroom.git
-cd classroom
+&& cd classroom
+```
+
+#### 2. create
+```bash
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+```
+
+#### 3. activate
+```bash
+source .venv/bin/activate  # macOS
+.venv\Scripts\activate     # Windows
+```
+
+#### 4. install
+```bash
 pip install -r requirements.txt
 ```
-### run
+
+### configure
+```bash
+cp .env.example .env
+```
+
+Edit that new .env file and add your [OpenAI API key](https://platform.openai.com/api-keys):
+```
+OPENAI_API_KEY=your_openai_api_key_here
+```
+
+### run test
 ```bash
 python main.py
 ```
@@ -40,7 +66,7 @@ Begin the classroom discussion now.
 Next speaker: Teacher
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Teacher (to chat_manager):
 
 Certainly! Today, we're diving into the fascinating topic of the evolution of metamorphosis. Metamorphosis is the biological process by which an animal physically develops after birth or hatching, involving a conspicuous and relatively abrupt change in the animal's body structure. Think about insects like butterflies and amphibians like frogs.
@@ -54,7 +80,7 @@ Alvin, can you start us off with your thoughts on why metamorphosis might have e
 Next speaker: Alvin
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Alvin (to chat_manager):
 
 Oh, this is such an interesting topic! I think metamorphosis might have evolved because it allows animals to exploit different ecological niches during different life stages. For example, caterpillars and butterflies live in entirely different environments and have different dietary needs, reducing competition between the young and adult stages.
@@ -68,7 +94,7 @@ But then again, I'm not sure how every stage developed synchronously for this to
 Next speaker: Bianca
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Bianca (to chat_manager):
 
 Oh, I've heard that metamorphosis didn't actually evolve—it's just how these creatures naturally transition between life stages. It seems more like a built-in process rather than something that developed over time. Plus, I often hear people say it's just a strategy to make life a bit more challenging for predators, so they can't always find prey in the same form.
@@ -80,7 +106,7 @@ What I'm confused about is how such a drastic change could have even started hap
 Next speaker: Charlie
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Charlie (to chat_manager):
 
 That's a thoughtful point you raise, Bianca. It seems like your perspective touches on both the idea of natural developmental processes and evolutionary advantages. Alvin mentioned ecological niches and reduced competition, while you highlighted predation and innate biological processes. I'd like to dig deeper into these ideas.
@@ -94,7 +120,7 @@ I'd love to hear thoughts from our human participant now—how do you think incr
 Next speaker: Alvin
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Alvin (to chat_manager):
 
 I'm really curious to hear what you think about this! How might gradual changes over time have contributed to the evolutionary development of metamorphosis?
@@ -113,7 +139,7 @@ idk
 Next speaker: Teacher
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Teacher (to chat_manager):
 
 That's okay! Evolution can be a complex and abstract topic. To think about how gradual changes might contribute to metamorphosis, consider how small beneficial changes in the developmental process might have been favored over many generations. For example, if certain changes in a larval stage made survival and reproduction slightly more likely, these traits would become more common with each passing generation.
@@ -127,7 +153,7 @@ With this explanation in mind, Alvin, do you have any further thoughts on how th
 Next speaker: Alvin
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Alvin (to chat_manager):
 
 I think that helps me see it a bit clearer! So, maybe we're looking at a series of small modifications: maybe at one point, a larva started to have a slightly different shape that helped it survive better, or a pupa that was better at protecting it during transformation. It's like each little change added up to something more significant, like improving the defenses or feeding strategies over a super long time.
@@ -141,7 +167,7 @@ I'd be curious to know what you think about that, Teacher!
 Next speaker: Teacher
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Teacher (to chat_manager):
 
 Great insights, Alvin! Scientists indeed use various methods to uncover the evolutionary steps. They compare DNA sequences to understand genetic changes and relationships between species. Fossil records are also valuable, as they provide physical evidence of transitional forms and ancient species that can illustrate evolutionary pathways.
@@ -157,7 +183,7 @@ Bianca, do you have any further thoughts on what we've discussed or questions ab
 Next speaker: Bianca
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Bianca (to chat_manager):
 
 Well, I'm still wrapping my head around how exactly scientists can draw such conclusions just from DNA and fossils. It seems like there'd be so many possible interpretations. Isn’t it kind of risky to put so much trust in these methods alone? I thought fossil records were pretty rare and DNA couldn’t tell us everything about how a creature looked or behaved in the past.
@@ -169,7 +195,7 @@ Do you think there's a chance we might be reading too much into these methods in
 Next speaker: Teacher
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Teacher (to chat_manager):
 
 Those are very valid concerns, Bianca. While DNA and fossil records offer valuable insights, you're right that they each have limitations. Fossil records can be sparse and subject to various interpretations, and while DNA reveals genetic relationships and potential functions, it doesn't impart a full picture of historical contexts or behaviors.
@@ -185,7 +211,7 @@ Charlie, do you have any thoughts on how various scientific approaches are used 
 Next speaker: Charlie
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Charlie (to chat_manager):
 
 I think it's fascinating how scientific understanding depends on a mosaic of methodologies, each contributing a piece to the broader puzzle. Alvin and Bianca both brought up essential points regarding the incremental changes and the limits of current scientific methods.
@@ -201,7 +227,7 @@ Does anyone else have thoughts on other ways or perspectives that might augment 
 Next speaker: Alvin
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Alvin (to chat_manager):
 
 I'm interested to hear what you might think about that! How do you see different areas of science coming together to help us understand complex processes like metamorphosis?
@@ -220,7 +246,7 @@ huh?
 Next speaker: Alvin
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Alvin (to chat_manager):
 
 Sorry if that wasn't clear! I was basically asking how you think various fields of science—like genetics, paleontology, and developmental biology—can be used together to help us understand complex processes like metamorphosis. Your thoughts or experiences with that could add another layer to our discussion. If you're not sure, maybe just think about how collaboration between different scientific areas can lead to new insights. What do you think?
@@ -239,7 +265,7 @@ life is good
 Next speaker: Teacher
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Teacher (to chat_manager):
 
 That's a positive approach! Hope you're enjoying the discussion so far. Even if it seems a bit abstract, sometimes just appreciating the intricacies of nature counts as a meaningful contribution to our understanding.
@@ -253,7 +279,7 @@ If you have anything else you're curious about or want to share, feel free! Othe
 Next speaker: Bianca
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Bianca (to chat_manager):
 
 No additional thoughts from me right now, but I'm intrigued by how this discussion built a clearer picture of metamorphosis for us all. It's a great reminder that even common misunderstandings can lead to new insights. I'll be sure to think more about how all these scientific fields contribute to our knowledge. What else have you been thinking about, Charlie?
@@ -263,7 +289,7 @@ No additional thoughts from me right now, but I'm intrigued by how this discussi
 Next speaker: Charlie
 
 
->>>>>>>> USING AUTO REPLY...
+USING AUTO REPLY...
 Charlie (to chat_manager):
 
 I think we've managed to explore a lot of intriguing facets of metamorphosis today. It's a reminder of how interconnected and multi-layered scientific exploration can be. I appreciated Alvin's curiosity about the gradual evolutionary changes and Bianca's skepticism regarding the reliability of evidence, as both perspectives are crucial in a balanced scientific inquiry.
