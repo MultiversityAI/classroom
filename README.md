@@ -1,39 +1,41 @@
 # classroom
 
-built using [AutoGen](https://github.com/microsoft/autogen) / [AG2](https://ag2.ai)
+built using [AG2](https://ag2.ai)
 
 ## usage guide
 
 ### setup
 
-#### 1. download
+#### 1. download source files
 ```bash
 git clone https://github.com/MultiversityAI/classroom.git
-&& cd classroom
+```
+```bash
+cd classroom
 ```
 
-#### 2. create
+#### 2. create virtual environment
 ```bash
 python -m venv venv
 ```
 
-#### 3. activate
+#### 3. activate your .venv
 ```bash
 source .venv/bin/activate  # macOS
 .venv\Scripts\activate     # Windows
 ```
 
-#### 4. install
+#### 4. install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### configure
+### configure LLM credentials
 ```bash
 cp .env.example .env
 ```
 
-Edit that new .env file and add your [OpenAI API key](https://platform.openai.com/api-keys):
+Edit the new .env file and add your [OpenAI API key](https://platform.openai.com/api-keys):
 ```
 OPENAI_API_KEY=your_openai_api_key_here
 ```
