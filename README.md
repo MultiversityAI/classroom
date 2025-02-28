@@ -16,7 +16,7 @@ cd classroom
 
 #### 2. create virtual environment
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 
 #### 3. activate your .venv
