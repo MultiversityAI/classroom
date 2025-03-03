@@ -189,7 +189,7 @@ chat_manager = GroupChatManager(
 )
 
 # Topic for discussion
-default_topic = "evolution of metamorphosis"
+default_topic = "bulk flow and diffusion in introductory collee"
 
 # Initial prompt
 initial_prompt = f"""
