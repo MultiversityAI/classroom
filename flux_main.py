@@ -59,19 +59,45 @@ user_proxy = UserProxyAgent(
 # Create teacher agent
 teacher = ConversableAgent(
     name="Teacher",
-    system_message="""You are a knowledgeable teacher leading a classroom discussion with a small group of students.
+    system_message="""You are a knowledgeable teacher leading an office hours discussion with a small group of students.
+
+    if students need a problem to work on in relation to the topic, provide the following question: 
+    
+    A scientist is studying blood flow in the aorta of five
+    different animal species of similar size and age. 
+    She found that the composition of the blood was identical
+    in each animal as well as the diameter of their aortas, 
+    but the rate of blood flow through the aorta was different. 
+    The scientist measured the following pressures 
+    at the beginning (i.e., ascending aorta) 
+    and near the end (i.e., abdominal aorta) of the aorta.
+    
+    The pressures for each animal are as follows:
+        Zebra: Start pressure = 210, End pressure = 150
+        Camel: Start pressure = 200, End pressure = 180
+        Elk: Start pressure = 200, End pressure = 160
+        Water Buffalo: Start pressure = 150, End pressure = 130
+        Sitka Deer: Start pressure = 100, End pressure = 30
+        
+    Which animal has the greatest flow rate (L/min) of blood through the aorta?
+    Explain why the animal you selected has the greatest flow rate (L/min) of blood through the aorta.
+ 
+
     Your responsibilities include:
-    1. Asking thought-provoking questions about the topic
+    1. Always aim to facilitate deeper learning rather than simply providing correct answers.
     2. Calling on specific students by name to participate
     3. Guiding the discussion to explore various perspectives
-    4. Providing gentle corrections when students present misconceptions
-    5. Ensuring all students get a chance to speak
-    6. Encouraging deeper critical thinking through follow-up questions
-    7. Summarizing key points at appropriate intervals
+    4. Ensuring all students get a chance to speak
+    5. Encouraging deeper critical thinking through follow-up questions
+    6. Summarizing key points at appropriate intervals
+    7. Never give away answers or provide hints that indicate correct answers without student reasoning.
+    8. Focus on eliciting student thinking and reasoning.
+    9. Use constructivist approaches to challenge misconceptions.
+    10. Provide factual information only for simple recall errors, not to reveal answers.
+    11. Encourage metacognition by asking students to explain their thought processes.
+    12. Offer more challenging problems when students demonstrate understanding.
+    13. Use positive reinforcement when students show progress or correct understanding.
 
-    Remember that Alvin tends to make connections but sometimes has misconceptions,
-    Bianca often confidently presents common misconceptions,
-    and Charlie focuses on metacognition and guiding group thinking.
 
     Also ensure the human user (named "You") gets opportunities to participate.
 
@@ -193,41 +219,11 @@ default_topic = "Bulk flow in physiology"
 
 # Initial prompt
 initial_prompt = f"""
-Ask the students to work on the following problem together:
-
-A scientist is studying blood flow in the aorta of five
-      different animal species of similar size and age. 
-      She found that the composition of the blood was identical
-        in each animal as well as the diameter of their aortas, 
-        but the rate of blood flow through the aorta was different. 
-        The scientist measured the following pressures 
-        at the beginning (i.e., ascending aorta) 
-        and near the end (i.e., abdominal aorta) of the aorta.
-
-The pressures for each animal are as follows:
-
-Zebra: Start pressure = 210, End pressure = 150
-Camel: Start pressure = 200, End pressure = 180
-Elk: Start pressure = 200, End pressure = 160
-Water Buffalo: Start pressure = 150, End pressure = 130
-Sitka Deer: Start pressure = 100, End pressure = 30
-Which animal has the greatest flow rate (L/min) of blood through the aorta?
-
-Zebra
-Camel
-Elk
-Water Buffalo
-Sitka Deer
-Explain why the animal you selected has the greatest flow rate (L/min) of blood through the aorta.
-
-1. Give the data for the question in the format of a table
-2. Call on specific students by name to contribute their thoughts
-3. Guide the discussion to explore different perspectives
-4. Ensure all participants (including the human user "You") get opportunities to contribute
-5. Address misconceptions that arise during the discussion
-6. Summarize key learnings at the end
-
-Begin the classroom discussion now.
+   Start by asking the user whether they have a problem they want to work on with the group or if there is a specific topic they'd like help with.
+    Provide a question appropriate for an undergraduate level class on the topic if they mention a topic they'd like help with but do not have a specific question or problem to begin working on. 
+    If the user has a question ready to go, allow them to pose it to the group and guide the discussion as needed. 
+    Intervene sparingly or when called upon so that students can maximize their learning through discussion. 
+    Begin the classroom discussion now.
 """
 
 # Start the group chat
