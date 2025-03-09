@@ -1,0 +1,25 @@
+# Python environment
+venv/
+.env
+__pycache__/
+.cache/
+.agignore
+
+# Sensitive files
+CONFIG_LIST.json
+.env
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+
+# Python cache files
+*.pyc
+__pycache__/
+
+# Node.js dependencies (if any)
+node_modules/
+
+# Not needed for deployment
+.ipynb_checkpoints/

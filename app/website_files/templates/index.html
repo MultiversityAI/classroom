@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Multiversity Office Hours</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --color-teacher: #15803d;
+                --color-teacher-bg: #dcfce7;
+                --color-student-alvin: #9333ea;
+                --color-student-alvin-bg: #f3e8ff;
+                --color-student-bianca: #ca8a04;
+                --color-student-bianca-bg: #fef9c3;
+                --color-student-charlie: #0369a1;
+                --color-student-charlie-bg: #e0f2fe;
+                --color-you: #1e40af;
+                --color-you-bg: #dbeafe;
+                --color-system: #78350f;
+                --color-system-bg: #fef3c7;
+            }
+
+            * { box-sizing: border-box; margin: 0; padding: 0; }
+
+            body {
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+                line-height: 1.5;
+                color: #1f2937;
+                background-color: #f3f4f6;
+                padding: 1rem;
+                padding-bottom: 1.5rem;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                height: 100%;
+            }
+
+            header {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+
+            header h1 {
+                font-size: 1.75rem;
+                color: #1f2937;
+                margin-bottom: 0.25rem;
+            }
+
+            header p {
+                color: #6b7280;
+                font-size: 0.875rem;
+            }
+
+            .chat-container {
+                background-color: white;
+                border-radius: 0.888rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                overflow: hidden;
+                padding-bottom: 12px;
+                margin-bottom: 12px;
+            }
+
+            .connection-status {
+                padding: 0.75rem 1rem;
+                font-size: 0.8125rem;
+                color: #6b7280;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .status-indicator {
+                display: flex;
+                align-items: center;
+            }
+
+            .status-dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                margin-right: 0.5rem;
+            }
+
+            .status-dot.connected { background-color: #10b981; }
+            .status-dot.connecting { background-color: #f59e0b; }
+            .status-dot.disconnected { background-color: #ef4444; }
+
+            .actions {
+                display: flex;
+                gap: 8px;
+            }
+
+            .action-button {
+                background: none;
+                border: 1px solid #e5e7eb;
+                border-radius: 3px;
+                padding: 4px 8px;
+                font-size: 0.75rem;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .action-button:hover {
+                background-color: #f9fafb;
+            }
+
+            .messages {
+                flex: 1;
+                padding: 1rem;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+
+            .message {
+                padding: 0.75rem;
+                border-radius: 0.5rem;
+                max-width: 85%;
+                position: relative;
+                animation: fadeIn 0.3s ease;
+            }
+
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(10px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+
+            .message .sender {
+                font-weight: 600;
+                font-size: 0.75rem;
+                margin-bottom: 0.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                width: 100%;
+            }
+
+            .message .sender .name,
+
+            .message .content {
+                font-size: 0.875rem;
+                white-space: pre-wrap;
+                line-height: 1.5;
+                word-break: break-word;
+            }
+
+            .message .time {
+                display: inline-block;
+                line-height: 1.2;
+                vertical-align: baseline;
+                color: #6b7280;
+                margin-left: 0.75rem;
+            }
+
+            .message.teacher {
+                background-color: var(--color-teacher-bg);
+                align-self: flex-start;
+                color: #000;
+            }
+
+            .message.alvin {
+                background-color: var(--color-student-alvin-bg);
+                align-self: flex-start;
+                color: #000;
+            }
+
+            .message.bianca {
+                background-color: var(--color-student-bianca-bg);
+                align-self: flex-start;
+                color: #000;
+            }
+
+            .message.charlie {
+                background-color: var(--color-student-charlie-bg);
+                align-self: flex-start;
+                color: #000;
+            }
+
+            .message.you {
+                background-color: var(--color-you-bg);
+                align-self: flex-end;
+                color: #000;
+                min-width: 80px;
+            }
+
+            .message.system {
+                background-color: var(--color-system-bg);
+                align-self: center;
+                text-align: center;
+                font-style: italic;
+                max-width: 90%;
+                font-size: 0.888rem;
+            }
+
+            .typing-indicator {
+                align-self: flex-start;
+                background-color: #f3f4f6;
+                border-radius: 10px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                display: none;
+                font-size: 0.875rem;
+            }
+
+            .typing-indicator.active {
+                display: flex;
+                align-items: center;
+            }
+
+            .dot {
+                width: 6px;
+                height: 6px;
+                background-color: #6b7280;
+                border-radius: 50%;
+                margin: 0 1px;
+                animation: typing 1.4s infinite ease-in-out;
+            }
+
+            .dot:nth-child(1) { animation-delay: 0s; }
+            .dot:nth-child(2) { animation-delay: 0.2s; }
+            .dot:nth-child(3) { animation-delay: 0.4s; }
+
+            @keyframes typing {
+                0%, 60%, 100% { transform: translateY(0); }
+                30% { transform: translateY(-4px); }
+            }
+
+            .input-area {
+                padding: 1rem;
+                display: flex;
+                flex-direction: column;
+                border-top: 1px solid #e5e7eb;
+                background-color: #ffffff;
+                border-radius: 0 0 0.5rem 0.5rem;
+                transition: all 0.3s ease;
+            }
+
+            .input-container {
+                display: flex;
+                position: relative;
+                height: 93px;
+                padding: 0.75rem 80px 1rem 1rem;
+                margin-bottom: 8px;
+            }
+
+            .textarea-wrapper {
+                flex: 1;
+                position: relative;
+                display: flex;
+                align-items: center;
+            }
+
+            .input-actions-area {
+                position: absolute;
+                right: 0;
+                top: 15px;
+                bottom: 0;
+                width: 70px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                margin-left: 12px;
+            }
+
+            .input-area textarea {
+                flex: 1;
+                width: 100%;
+                padding: 0.75rem 80px 0.75rem 1rem;
+                border: 1px solid #d1d5db;
+                border-radius: .888rem;
+                font-size: 0.95rem;
+                resize: none;
+                height: 93px;
+                font-family: inherit;
+                overflow-y: auto;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                line-height: 1.5;
+                box-sizing: border-box;
+                -webkit-appearance: none;
+                -webkit-tap-highlight-color: rgba(124, 157, 124, 0.25);
+                appearance: none;
+                margin-bottom: 19px;
+            }
+
+            .input-actions {
+                position: absolute;
+                right: 19px;
+                top: 60%;
+                transform: translateY(-50%);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+                z-index: 10;
+            }
+
+            .action-icon {
+                background: none;
+                border: none;
+                color: #6b7280;
+                padding: 8px;
+                border-radius: 50%;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .action-icon:hover {
+                background-color: #f3f4f6;
+                color: #3b82f6;
+            }
+
+            .send-button {
+                background-color: #3E673E;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                cursor: pointer;
+                transition: all 0.2s;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .send-button:disabled {
+                background-color: #9ca3af;
+                transform: none;
+                opacity: 0.7;
+            }
+
+            .send-button:hover:not(:disabled) {
+                background-color: #7c9d7c;
+                transform: scale(1.05);
+            }
+
+            .input-status {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                margin-top: 0.5rem;
+                padding: 0 0.5rem;
+            }
+
+            .character-count {
+                background-color: rgba(255, 255, 255, 0.9);
+                border-radius: 8px;
+                padding: 5px 0 5px 0;
+            }
+
+            .current-turn-indicator {
+                background-color: #f0f9ff;
+                border: 2px solid #3b82f6;
+                border-radius: 8px;
+                padding: 6px 12px;
+                margin: 8px 0;
+                text-align: center;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #1e40af;
+                animation: pulse 2s infinite;
+            }
+
+            @keyframes pulse {
+                0% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+                70% { box-shadow: 0 0 0 6px rgba(59, 130, 246, 0); }
+                100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+            }
+
+            .message .sender {
+                font-weight: 600;
+                font-size: 0.75rem;
+                margin-bottom: 0.5rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                width: 100%;
+            }
+
+            .message .sender .name {
+                padding: 2px 8px;
+                border-radius: 4px;
+                color: white;
+            }
+
+            .message.teacher .sender .name {
+                background-color: var(--color-teacher);
+            }
+
+            .message.alvin .sender .name {
+                background-color: var(--color-student-alvin);
+            }
+
+            .message.bianca .sender .name {
+                background-color: var(--color-student-bianca);
+            }
+
+            .message.charlie .sender .name {
+                background-color: var(--color-student-charlie);
+            }
+
+            .message.you .sender .name {
+                background-color: var(--color-you);
+            }
+
+            .input-area textarea:focus {
+                outline: none;
+                border-color: #7c9d7c;
+                box-shadow: 0 0 0 3px rgba(124, 157, 124, 0.25);
+                -webkit-appearance: none;
+                appearance: none;
+            }
+
+            .input-area textarea:focus-visible {
+                outline-color: #7c9d7c;
+            }
+
+            .input-area textarea:active {
+                border-color: #7c9d7c;
+            }
+
+            .input-area textarea:not(.expanded) {
+                padding-top: 23px;
+                padding-bottom: 19px;
+                padding-right: 2rem;
+                padding-left: 2rem;
+            }
+
+            .input-area.your-turn .turn-badge {
+                display: block;
+                animation: pulse 2s infinite;
+            }
+
+            .input-area.your-turn textarea {
+                border-color: #3b82f6;
+                background-color: #ffffff;
+            }
+
+            @media (max-width: 640px) {
+                .input-area {
+                    padding: 0.75rem;
+                    margin-bottom: 10px;
+                }
+
+                .input-area textarea {
+                    padding-right: 70px;
+                    font-size: 16px;
+                    padding: 0.75rem 4.5rem 0.75rem 0.75rem;
+                }
+
+                .send-button {
+                    width: 36px;
+                    height: 36px;
+                }
+
+                .input-actions {
+                    width: 36px;
+                    right: 12px;
+                    gap: 5px;
+                }
+
+                .input-actions::before {
+                    width: 60px;
+                }
+
+                body {
+                    padding-bottom: 1rem;
+                }
+
+                .chat-container {
+                    margin-bottom: 8px;
+                    padding-bottom: 7px;
+                }
+            }
+
+            @media not all and (min-resolution:.001dpcm) {
+                @supports (-webkit-appearance:none) {
+                    .input-area textarea:focus {
+                        border-color: #7c9d7c !important;
+                        outline-color: #7c9d7c !important;
+                    }
+                }
+            }
+
+            @media (max-width: 480px) {
+                .input-area {
+                    margin-bottom: 5px;
+                    position: relative;
+                }
+
+                body {
+                    padding-bottom: 0.5rem;
+                }
+
+                .chat-container {
+                    min-height: 300px;
+                }
+            }
+
+            @media screen and (-webkit-min-device-pixel-ratio: 0) {
+                .input-area textarea {
+                    font-size: max(16px, 0.95rem);
+                }
+            }
+
+            .character-count.warning {
+                color: #f59e0b;
+                font-weight: bold;
+            }
+
+            .character-count.limit {
+                color: #ef4444;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Multiversity Office Hours</h1>
+                <p>Learn through discussions with AI agents...</p>
+            </header>
+
+            <div class="chat-container">
+                <div class="connection-status">
+                    <div class="status-indicator">
+                        <div id="status-dot" class="status-dot connecting"></div>
+                        <span id="status-text">Connecting...</span>
+                    </div>
+                    <div class="actions">
+                        <button id="clear-btn" class="action-button">Clear Chat</button>
+                        <button id="restart-btn" class="action-button">Restart</button>
+                    </div>
+                </div>
+
+                <div id="messages" class="messages">
+                </div>
+
+                <div id="typing-indicator" class="typing-indicator">
+                    <span id="typing-name"></span>&nbsp;is typing
+                    <div class="dots">
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                        <div class="dot"></div>
+                    </div>
+                </div>
+
+                <div class="input-area" id="input-area">
+                    <div class="input-container">
+                        <textarea id="message-input" placeholder="Type your message here..."></textarea>
+                        <div class="input-actions">
+                            <button id="send-button" class="send-button" title="Send message">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                                </svg>
+                            </button>
+                            <div class="character-count" id="character-count">0/250</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            const characterCount = document.getElementById('character-count');
+            const inputArea = document.getElementById('input-area');
+            const messagesContainer = document.getElementById('messages');
+            const messageInput = document.getElementById('message-input');
+            const sendButton = document.getElementById('send-button');
+            const statusDot = document.getElementById('status-dot');
+            const statusText = document.getElementById('status-text');
+            const clearBtn = document.getElementById('clear-btn');
+            const restartBtn = document.getElementById('restart-btn');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const typingName = document.getElementById('typing-name');
+
+            const MAX_CHARS = 250;
+            messageInput.maxLength = MAX_CHARS;
+
+            function safeJsonParse(str) {
+                try {
+                    return JSON.parse(str);
+                } catch (e) {
+                    console.error('Error parsing JSON:', e);
+                    return { content: str };
+                }
+            }
+
+            let agentNames = ["Teacher", "You"];
+
+            function updateAgentNames(agents) {
+                if (Array.isArray(agents)) {
+                    agents.forEach(name => {
+                        if (!agentNames.includes(name)) {
+                            agentNames.push(name);
+                        }
+                    });
+                    console.log("Updated agent names:", agentNames);
+                }
+            }
+
+            function findCalledAgent(messageContent) {
+                if (!messageContent) return null;
+
+                const questionPatterns = [
+                    /([A-Za-z]+),\s+(?:could|can|would)\s+you/i,
+                    /What\s+(?:do|about)\s+you\s+think,\s+([A-Za-z]+)/i,
+                    /([A-Za-z]+),\s+(?:what|how|do)/i,
+                    /let's\s+hear\s+from\s+([A-Za-z]+)/i
+                ];
+
+                for (const pattern of questionPatterns) {
+                    const match = messageContent.match(pattern);
+                    if (match && match[1]) {
+                        const potentialName = match[1].trim();
+                        if (agentNames.includes(potentialName)) {
+                            console.log(`Found direct question to: ${potentialName}`);
+                            return potentialName;
+                        }
+                    }
+                }
+
+                const sentences = messageContent.split(/[.!?]\s+/);
+                const lastSentences = sentences.slice(-2);
+
+                for (const sentence of lastSentences) {
+                    for (const name of agentNames) {
+                        if (sentence.includes(`${name},`) || 
+                            sentence.includes(`${name}?`) || 
+                            sentence.match(new RegExp(`\\b${name}\\b.*\\?$`))) {
+                            console.log(`Found agent in sentence: ${name}`);
+                            return name;
+                        }
+                    }
+                }
+
+                return null;
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const messageInput = document.getElementById('message-input');
+                const sendButton = document.getElementById('send-button');
+                const characterCount = document.getElementById('character-count');
+                const MAX_CHARS = 250;
+
+                messageInput.maxLength = MAX_CHARS;
+                sendButton.disabled = true;
+
+                function updateCharacterCount() {
+                    const currentLength = messageInput.value.length;
+                    const isEmpty = messageInput.value.trim() === '';
+
+                    characterCount.textContent = `${currentLength}/${MAX_CHARS}`;
+
+                    characterCount.classList.remove('warning', 'limit');
+
+                    if (currentLength > MAX_CHARS) {
+                        characterCount.classList.add('limit');
+                        characterCount.style.color = '#ef4444';
+                        characterCount.style.fontWeight = 'bold';
+                    } else if (currentLength > MAX_CHARS * 0.9) {
+                        characterCount.classList.add('warning');
+                        characterCount.style.color = '#f59e0b';
+                        characterCount.style.fontWeight = 'bold';
+                    } else {
+                        characterCount.style.color = '#6b7280';
+                        characterCount.style.fontWeight = 'normal';
+                    }
+
+                    sendButton.disabled = isEmpty || (currentLength > MAX_CHARS);
+                }
+
+                messageInput.addEventListener('input', updateCharacterCount);
+
+                if ('visualViewport' in window) {
+                    window.visualViewport.addEventListener('resize', function() {
+                        document.body.style.height = window.visualViewport.height + 'px';
+                    });
+                }
+
+                messageInput.addEventListener('focus', function() {
+                    setTimeout(function() {
+                        messageInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                });
+
+                updateCharacterCount();
+            });
+
+            sendButton.disabled = true;
+
+            messageInput.addEventListener('input', function() {
+                sendButton.disabled = this.value.trim() === '';
+            });
+
+            sendButton.disabled = true;
+
+            function updateUserTurnVisual(isUserTurn) {
+                if (isUserTurn) {
+                    inputArea.classList.add('your-turn');
+                    messageInput.placeholder = "Your turn! Type your response...";
+                    messageInput.focus();
+
+                    messageInput.style.animation = 'none';
+                    setTimeout(() => {
+                        messageInput.style.animation = 'pulse 2s';
+                    }, 10);
+                } else {
+                    inputArea.classList.remove('your-turn');
+                    messageInput.placeholder = "Type your message here...";
+                }
+            }
+
+            function showTypingIndicator(agent) {
+                if (!agent) return;
+                typingName.textContent = agent;
+                typingIndicator.classList.add('active');
+                typing = true;
+            }
+
+            function hideTypingIndicator() {
+                typingIndicator.classList.remove('active');
+                typing = false;
+            }
+
+            function addAgentMessage(agent, content) {
+                const messageEl = document.createElement('div');
+                messageEl.className = `message ${agent.toLowerCase()}`;
+
+                const now = new Date();
+                const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                messageEl.innerHTML = `
+                    <div class="sender">
+                        <span class="name">${agent}</span>
+                        <span class="time">${time}</span>
+                    </div>
+                    <div class="content">${content}</div>
+                `;
+
+                messagesContainer.appendChild(messageEl);
+                scrollToBottom();
+
+                if (agent !== "You" && agent !== "System") {
+                    const calledPerson = findCalledAgent(content);
+                    if (calledPerson === "You") {
+                        userTurn = true;
+                        updateUserTurnVisual(true);
+                        messageInput.focus();
+
+                        const flashInput = () => {
+                            messageInput.style.borderColor = '#10b981';
+                            messageInput.style.boxShadow = '0 0 0 4px rgba(16, 185, 129, 0.5)';
+
+                            setTimeout(() => {
+                                messageInput.style.borderColor = '#d1d5db';
+                                messageInput.style.boxShadow = 'none';
+
+                                setTimeout(() => {
+                                    messageInput.style.borderColor = '#10b981';
+                                    messageInput.style.boxShadow = '0 0 0 4px rgba(16, 185, 129, 0.5)';
+
+                                    setTimeout(() => {
+                                        updateUserTurnVisual(true);
+                                    }, 300);
+                                }, 300);
+                            }, 300);
+                        };
+
+                        flashInput();
+                    }
+                }
+            }
+
+            function addSystemMessage(content) {
+                const messageEl = document.createElement('div');
+                messageEl.className = 'message system';
+                messageEl.innerHTML = `<div class="content">${content}</div>`;
+
+                messagesContainer.appendChild(messageEl);
+                scrollToBottom();
+            }
+
+            function handleMessage(message) {
+                console.log('Processing message:', message);
+
+                if (message.type === 'agent_message') {
+                    console.log(`Processing agent message from ${message.agent}: "${message.content ? message.content.substring(0, 50) : '[No content]'}..."`);
+                    hideTypingIndicator();
+
+                    try {
+                        addAgentMessage(message.agent, message.content);
+                        console.log(`Successfully added ${message.agent} message to UI`);
+                    } catch (error) {
+                        console.error("Error adding agent message to UI:", error);
+                        addSystemMessage(`Error displaying message from ${message.agent}: ${error.message}`);
+                    }
+                } else if (message.type === 'system_message') {
+                    console.log('Processing system message');
+                    addSystemMessage(message.content);
+                } else if (message.type === 'agent_typing') {
+                    console.log(`Showing typing indicator for ${message.agent}`);
+                    showTypingIndicator(message.agent);
+                } else {
+                    console.log('Unknown message type:', message);
+                    addSystemMessage('Received: ' + JSON.stringify(message));
+                }
+            }
+
+            function createTurnIndicator(agent) {
+                document.querySelectorAll('.current-turn-indicator').forEach(el => el.remove());
+
+                const indicator = document.createElement('div');
+                indicator.className = 'current-turn-indicator';
+
+                if (agent === "You") {
+                    indicator.innerHTML = `<strong>It's your turn!</strong> Please respond to the question.`;
+
+                    const inputArea = document.querySelector('.input-area');
+                    inputArea.classList.add('your-turn');
+
+                    messageInput.focus();
+                } else {
+                    indicator.innerHTML = `<strong>${agent}</strong> is responding...`;
+
+                    const inputArea = document.querySelector('.input-area');
+                    inputArea.classList.remove('your-turn');
+                }
+
+                messagesContainer.appendChild(indicator);
+                scrollToBottom();
+            }
+
+            function updateTurnIndicator(agent) {
+                userTurn = agent === "You";
+                updateUserTurnVisual(userTurn);
+                createTurnIndicator(agent);
+            }
+
+            function sanitizeInput(input) {
+                return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "");
+            }
+
+            function sendMessage() {
+                const rawMessage = messageInput.value.trim();
+                if (!rawMessage) return;
+
+                const message = sanitizeInput(rawMessage);
+
+                if (!message) return;
+
+                if (!userTurn) {
+                    const proceed = confirm("It doesn't seem to be your turn to speak. Send your message anyway?");
+                    if (!proceed) {
+                        return;
+                    }
+                }
+
+                const formattedMessage = JSON.stringify({
+                    type: "user_message",
+                    content: message || ""
+                });
+
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    try {
+                        console.log("Sending message:", formattedMessage);
+                        ws.send(formattedMessage);
+
+                        userTurn = false;
+                        updateUserTurnVisual(false);
+                        messageInput.value = '';
+                    } catch (error) {
+                        console.error("WebSocket send error:", error);
+                        addSystemMessage("Error sending message");
+                    }
+                } else {
+                    console.error("WebSocket is not connected.");
+                    addSystemMessage("Not connected to server");
+                }
+
+                messageInput.focus();
+            }
+
+            function startHeartbeat() {
+                if (window.heartbeatInterval) {
+                    clearInterval(window.heartbeatInterval);
+                }
+
+                window.heartbeatInterval = setInterval(function() {
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        try {
+                            ws.send(JSON.stringify({
+                                type: "ping",
+                                content: "keepalive"
+                            }));
+                            console.log("Ping sent to keep connection alive");
+                        } catch (e) {
+                            console.error("Error sending ping:", e);
+                        }
+                    } else {
+                        console.log("WebSocket not open, skipping heartbeat");
+                    }
+                }, 30000);
+            }
+
+            function updateConnectionStatus(status, text) {
+                statusDot.className = `status-dot ${status}`;
+                statusText.textContent = text;
+            }
+
+            function scrollToBottom() {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+
+            function clearChat() {
+                if (confirm('Clear all messages?')) {
+                    messagesContainer.innerHTML = '';
+                    addSystemMessage('Chat history cleared');
+                }
+            }
+
+            function restartDiscussion() {
+                if (confirm('Restart the classroom discussion?')) {
+                    messagesContainer.innerHTML = '';
+                    addSystemMessage('Restarting classroom discussion...');
+
+                    if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+                        try {
+                            console.log("Sending restart command");
+                            ws.send(JSON.stringify({
+                                "type": "command",
+                                "content": "restart"
+                            }));
+
+                            console.log("Closing current WebSocket connection");
+                            ws.close();
+                        } catch (e) {
+                            console.error("Error during restart:", e);
+                            addSystemMessage("Error restarting discussion");
+                        }
+                    }
+
+                    setTimeout(function() {
+                        console.log("Attempting to reconnect...");
+                        connectWebSocket();
+                    }, 2000);
+                }
+            }
+
+            let ws = null;
+            let connecting = false;
+            let reconnecting = false;
+            let userTurn = false;
+            let typing = false;
+
+            function connectWebSocket() {
+                if ((ws && ws.readyState === WebSocket.OPEN) ||
+                    (ws && ws.readyState === WebSocket.CONNECTING && !reconnecting)) {
+                    console.log("WebSocket is already connected or connecting.");
+                    return;
+                }
+
+                connecting = true;
+                updateConnectionStatus('connecting', 'Connecting...');
+
+                const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+                const wsHostname = window.location.hostname;
+                ws = new WebSocket(`${wsProtocol}${wsHostname}:8080`);
+
+                let retryAttempts = 0;
+                const maxRetries = 5;
+
+                ws.onopen = function() {
+                    console.log("WebSocket connection opened successfully!");
+                    updateConnectionStatus('connected', 'Connected');
+                    connecting = false;
+
+                    console.log("WebSocket URL:", ws.url);
+                    console.log("WebSocket protocol:", ws.protocol);
+                    console.log("WebSocket readyState:", ws.readyState);
+
+                    setTimeout(function() {
+                        try {
+                            const startCommand = JSON.stringify({
+                                "type": "command",
+                                "content": "start"
+                            });
+                            console.log("Sending start command:", startCommand);
+                            ws.send(startCommand);
+                            addSystemMessage("Start command sent");
+                        } catch (e) {
+                            console.error("Error sending start command:", e);
+                            addSystemMessage("Error sending start command: " + e.message);
+                        }
+                    }, 1000);
+
+                    startHeartbeat();
+                };
+
+                ws.onmessage = function(event) {
+                    console.log("Raw WebSocket message received:", event.data);
+
+                    try {
+                        const message = JSON.parse(event.data);
+                        console.log("Parsed message:", message);
+                        if (message.type === "text" && typeof message.content === "object" && message.content.content) {
+                            let innerContent = message.content.content;
+
+                            if (typeof innerContent === "string" && innerContent.trim().startsWith("{")) {
+                                try {
+                                    let parsedInner = JSON.parse(innerContent);
+                                    if (parsedInner.type === "command" && parsedInner.content === "start") {
+                                        addSystemMessage("STARTED GROUP CHAT");
+                                        return;
+                                    }
+                                } catch (e) {
+                                    console.warn("⚠️ Failed to parse inner JSON content:", innerContent);
+                                }
+                            }
+                        }
+                        if (message.type === "agent_message") {
+                            addAgentMessage(message.agent, message.content);
+                            hideTypingIndicator();
+
+                            if (message.agent !== "You") {
+                                const calledAgent = findCalledAgent(message.content);
+                                console.log("Called agent detected:", calledAgent);
+
+                                if (calledAgent) {
+                                    updateTurnIndicator(calledAgent);
+                                }
+                            }
+                        }
+                        else if (message.type === "system_message") {
+                            addSystemMessage(message.content);
+                        }
+                        else if (message.type === "agent_list") {
+                            console.log("Received agent list:", message.content);
+                            updateAgentNames(message.content);
+                        }
+                        else if (message.type === "user_message") {
+                            addAgentMessage("You", message.content);
+                            userTurn = false;
+                            updateUserTurnVisual(false);
+                        }
+                        else if (message.type === "terminate") {
+                            addSystemMessage("The discussion has ended.");
+                        }
+                        else if (message.type === "text") {
+                            if (message.content && message.content.sender_name) {
+                                addAgentMessage(message.content.sender_name, message.content.content);
+
+                                if (message.content.sender_name !== "You") {
+                                    const calledAgent = findCalledAgent(message.content.content);
+                                    if (calledAgent === "You") {
+                                        userTurn = true;
+                                        updateUserTurnVisual(true);
+                                        messageInput.focus();
+                                    }
+                                }
+                            }
+                        }
+                        else if (message.type === "error") {
+                            addSystemMessage("Error: " + message.message);
+                        }
+                        else {
+                            console.log("Ignoring message:", message);
+                        }
+                    } catch (e) {
+                        console.error("Error handling message:", e);
+                    }
+                };
+
+                ws.onclose = function(event) {
+                    updateConnectionStatus('disconnected', 'Disconnected');
+                    console.log("WebSocket connection closed with code:", event.code);
+                    console.log("Close reason:", event.reason);
+                    console.log("Clean close:", event.wasClean);
+                    addSystemMessage(`Connection closed (Code: ${event.code}${event.reason ? ', Reason: ' + event.reason : ''})`);
+                    connecting = false;
+                };
+
+                ws.onerror = function(error) {
+                    console.error("WebSocket error:", error);
+                    updateConnectionStatus('disconnected', 'Error occurred');
+                };
+            }
+
+            sendButton.addEventListener('click', sendMessage);
+
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            clearBtn.addEventListener('click', clearChat);
+            restartBtn.addEventListener('click', restartDiscussion);
+
+            window.addEventListener('load', function() {
+                connectWebSocket();
+                addSystemMessage('Welcome!');
+            });
+            document.body.appendChild(testBtn);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,27 @@
+app = "multi"
+primary_region = "atl"
+
+[build]
+
+# HTTP service for your FastAPI app
+[http_service]
+  internal_port = 8001
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+# WebSocket service needs explicit configuration
+[[services]]
+  protocol = "tcp"
+  internal_port = 8080
+
+  [[services.ports]]
+    port = 8080
+    handlers = ["tls", "http"]
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
